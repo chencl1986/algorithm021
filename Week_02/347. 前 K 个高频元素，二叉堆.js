@@ -103,28 +103,6 @@ class BinaryHeap {
     return value;
   }
 
-  // 删除指定元素
-  deleteItem(value) {
-    // 查找元素在堆中对应的索引
-    const index = this.data.findIndex((item) => item === value);
-
-    // 根据索引删除相应元素
-    if (typeof index === 'number') {
-      this.delete(index);
-    }
-  }
-
-  // 删除指定元素
-  deleteItem(value) {
-    // 查找元素在堆中对应的索引
-    const index = this.data.findIndex((item) => item === value);
-
-    // 根据索引删除相应元素
-    if (typeof index === 'number') {
-      this.delete(index);
-    }
-  }
-
   // 读取堆顶元素
   peek() {
     return this.data[0];
@@ -134,26 +112,35 @@ class BinaryHeap {
   getData() {
     return this.data;
   }
-
-  printHeap() {
-    console.log('nHeap = ');
-    console.log(this.data);
-  }
 }
 
-let maxHeap = new BinaryHeap((a, b) => b - a);
-maxHeap.insert(10);
-maxHeap.insert(4);
-maxHeap.insert(9);
-maxHeap.insert(1);
-maxHeap.insert(7);
-maxHeap.insert(5);
-maxHeap.insert(3);
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number[]}
+ */
+var topKFrequent = function (nums, k) {
+  let result = []; // 存储结果
+  let map = new Map(); // 用于统计元素出现频次
+  // 使用堆将元素按出现频次从大到小排序
+  let heap = new BinaryHeap((a, b) => b[1] - a[1]);
 
-maxHeap.printHeap();
-maxHeap.delete(0);
-maxHeap.printHeap();
-maxHeap.delete(2);
-maxHeap.printHeap();
-maxHeap.deleteItem(7);
-maxHeap.printHeap();
+  // 遍历数组，统计元素出现的频次，并将其存入Map
+  for (let i = 0; i < nums.length; i++) {
+    map.has(nums[i])
+      ? map.set(nums[i], map.get(nums[i]) + 1)
+      : map.set(nums[i], 1);
+  }
+
+  // 将统计好的元素与频次取出，依次插入堆进行排序
+  for (const element of map) {
+    heap.insert(element);
+  }
+
+  // 从堆中依次取出k个元素，存入结果
+  for (let i = 0; i < k; i++) {
+    result.push(heap.deleteHead()[0]);
+  }
+
+  return result;
+};

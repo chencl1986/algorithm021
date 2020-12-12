@@ -9,13 +9,6 @@ class BinaryHeap {
     return this.data.length;
   }
 
-  // 向堆中插入多个元素
-  insertMultiple(arr) {
-    for (let i = 0; i < arr.length; i++) {
-      this.insert(arr[i]);
-    }
-  }
-
   // 向堆插入元素
   insert(value) {
     this.insertAt(this.data.length, value);
@@ -114,46 +107,37 @@ class BinaryHeap {
     }
   }
 
-  // 删除指定元素
-  deleteItem(value) {
-    // 查找元素在堆中对应的索引
-    const index = this.data.findIndex((item) => item === value);
-
-    // 根据索引删除相应元素
-    if (typeof index === 'number') {
-      this.delete(index);
-    }
-  }
-
   // 读取堆顶元素
   peek() {
     return this.data[0];
   }
-
-  // 读取所有堆元素
-  getData() {
-    return this.data;
-  }
-
-  printHeap() {
-    console.log('nHeap = ');
-    console.log(this.data);
-  }
 }
 
-let maxHeap = new BinaryHeap((a, b) => b - a);
-maxHeap.insert(10);
-maxHeap.insert(4);
-maxHeap.insert(9);
-maxHeap.insert(1);
-maxHeap.insert(7);
-maxHeap.insert(5);
-maxHeap.insert(3);
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number[]}
+ */
+var maxSlidingWindow = function (nums, k) {
+  let result = []; // 存储结果
+  let maxHeap = new BinaryHeap((a, b) => b - a); // 创建一个大顶堆
 
-maxHeap.printHeap();
-maxHeap.delete(0);
-maxHeap.printHeap();
-maxHeap.delete(2);
-maxHeap.printHeap();
-maxHeap.deleteItem(7);
-maxHeap.printHeap();
+  for (let i = 0; i < nums.length; i++) {
+    const start = i - k; // 找到需要从堆中删除元素的索引，即刚移出窗口的元素
+
+    // 如果start>=0，表示当前已有元素移出了窗口，需要从堆中删除，保证堆中元素都是窗口内的元素
+    if (start >= 0) {
+      maxHeap.deleteItem(nums[start]);
+    }
+
+    // 将当前元素插入堆进行排序
+    maxHeap.insert(nums[i]);
+
+    // 当堆中有k个元素时，表示当前窗口已完全在数组中，可以进行取值
+    if (maxHeap.size() === k) {
+      result.push(maxHeap.peek());
+    }
+  }
+
+  return result;
+};
