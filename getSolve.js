@@ -2,51 +2,25 @@ let solutions = document.querySelectorAll(
   '.css-7dwjih-Content .css-1e9rbo3-Link:last-child',
 );
 let exercises = [
-  // '盛更多水的容器',
-  // '移动零',
-  // '爬楼梯',
-  // '三数之和',
-  // '反转链表',
-  // '两两交换链表中的节点',
-  // '环形链表',
-  // '环形链表II',
-  // 'K 个一组翻转链表',
-  // '有效的括号',
-  // '最小栈',
-  // '柱状图中最大的矩形',
-  // '滑动窗口最大值',
-  // '删除排序数组中的重复项',
-  // '旋转数组',
-  // '合并两个有序链表',
-  // '合并两个有序数组',
-  // '两数之和',
-  // '加1',
-  // '设计循环双端队列',
-  // '接雨水',
-  'container-with-most-water',
-  'move-zeroes',
-  'climbing-stairs',
-  '3sum',
-  'reverse-linked-list',
-  'swap-nodes-in-pairs',
-  'linked-list-cycl',
-  'linked-list-cycle-ii',
-  'reverse-nodes-in-k-group',
-  'valid-parentheses',
-  'min-stack',
-  'largest-rectangle-in-histogra',
-  'sliding-window-maximu',
-  'remove-duplicates-from-sorted-array',
-  'rotate-array',
-  'merge-two-sorted-lists',
-  'merge-sorted-array',
-  'two-sum',
-  'plus-one',
-  'design-circular-dequ',
-  'trapping-rain-water',
+  'https://leetcode-cn.com/problems/valid-anagram/',
+  'https://leetcode-cn.com/problems/group-anagrams/',
+  'https://leetcode-cn.com/problems/two-sum/',
+  'https://leetcode-cn.com/problems/binary-tree-inorder-traversal/',
+  'https://leetcode-cn.com/problems/binary-tree-preorder-traversal/',
+  'https://leetcode-cn.com/problems/n-ary-tree-postorder-traversal/',
+  'https://leetcode-cn.com/problems/n-ary-tree-preorder-traversal/',
+  'https://leetcode-cn.com/problems/n-ary-tree-level-order-traversal/',
+  'https://leetcode-cn.com/problems/zui-xiao-de-kge-shu-lcof/',
+  'https://leetcode-cn.com/problems/sliding-window-maximum/',
+  'https://leetcode-cn.com/problems/chou-shu-lcof/',
+  'https://leetcode-cn.com/problems/top-k-frequent-elements/',
 ];
 let exerciseMap = new Map(
-  exercises.map((exercise, index) => [exercise, index]),
+  exercises.map((exercise, index) => {
+    const arr = exercise.split('/');
+    console.log(arr);
+    return [arr[arr.length - 2], index];
+  }),
 );
 let resultArr = new Array(exerciseMap.size);
 let result = '';
@@ -59,12 +33,12 @@ console.log(resultArr);
 Array.from(solutions).forEach((solution) => {
   for (const [exercise, index] of exerciseMap) {
     if (solution.getAttribute('href').match(exercise)) {
-      console.log(
+      /* console.log(
         solution.innerHTML,
         exercise,
         solution.innerHTML.match(exercise),
         index,
-      );
+      ); */
       const str = `[${solution.innerHTML}](${
         window.origin + solution.getAttribute('href')
       })\n`;
@@ -80,8 +54,10 @@ Array.from(solutions).forEach((solution) => {
 console.log(test);
 console.log(resultArr);
 for (let i = 0; i < resultArr.length; i++) {
-  for (let j = 0; j < resultArr[i].length; j++) {
-    result += `${count++}. ${resultArr[i][j]}`;
+  if (resultArr[i]) {
+    for (let j = 0; j < resultArr[i].length; j++) {
+      result += `${count++}. ${resultArr[i][j]}`;
+    }
   }
 }
 
