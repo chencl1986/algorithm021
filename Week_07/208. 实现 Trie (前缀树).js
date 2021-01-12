@@ -1,3 +1,10 @@
+/*
+ * @lc app=leetcode.cn id=208 lang=javascript
+ *
+ * [208] 实现 Trie (前缀树)
+ */
+
+// @lc code=start
 /**
  * Initialize your data structure here.
  */
@@ -85,3 +92,4 @@ Trie.prototype.startsWith = function (prefix) {
  * var param_2 = obj.search(word)
  * var param_3 = obj.startsWith(prefix)
  */
+// @lc code=end
