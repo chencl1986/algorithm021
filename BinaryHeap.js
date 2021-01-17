@@ -130,11 +130,6 @@ class BinaryHeap {
     return this.data[0];
   }
 
-  // 读取所有堆元素
-  getData() {
-    return this.data;
-  }
-
   printHeap() {
     console.log('nHeap = ');
     console.log(this.data);
