@@ -75,7 +75,7 @@ const merge = (nums, left, right, mid, compare) => {
 
 我为部分题目写了题解，如下：
 
-其余没写题解的题目，都在作业中写了详细注释，有空时补上。
+其余没写题解的题目，都在作业中写了详细注释，课程结束后会补上。
 
 1. [LeetCode题解：231. 2的幂，位运算：去除二进制中最右边的 1，JavaScript，详细注释](https://leetcode-cn.com/problems/power-of-two/solution/leetcodeti-jie-wei-yun-suan-qu-chu-er-jin-zhi-zh-2)
 2. [LeetCode题解：231. 2的幂，位运算取二进制中最右边的1，JavaScript，详细注释](https://leetcode-cn.com/problems/power-of-two/solution/leetcodeti-jie-231-2de-mi-wei-yun-suan-qu-er-jin-z)
