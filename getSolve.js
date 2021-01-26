@@ -2,20 +2,19 @@ let solutions = document.querySelectorAll(
   '.css-7dwjih-Content .css-1e9rbo3-Link:last-child',
 );
 let exercises = [
-  'https://leetcode-cn.com/problems/implement-trie-prefix-tree/',
-  'https://leetcode-cn.com/problems/word-search-ii/',
-  'https://leetcode-cn.com/problems/number-of-provinces/',
-  'https://leetcode-cn.com/problems/number-of-islands/',
-  'https://leetcode-cn.com/problems/surrounded-regions/',
-  'https://leetcode-cn.com/problems/climbing-stairs/',
-  'https://leetcode-cn.com/problems/generate-parentheses/',
+  'https://leetcode-cn.com/problems/number-of-1-bits/',
+  'https://leetcode-cn.com/problems/power-of-two/',
+  'https://leetcode-cn.com/problems/reverse-bits/',
   'https://leetcode-cn.com/problems/n-queens/',
-  'https://leetcode-cn.com/problems/valid-sudoku/',
-  'https://leetcode-cn.com/problems/sudoku-solver/',
-  'https://leetcode-cn.com/problems/word-ladder/',
-  'https://leetcode-cn.com/problems/minimum-genetic-mutation/',
-  'https://leetcode-cn.com/problems/shortest-path-in-binary-matrix/',
-  'https://leetcode-cn.com/problems/sliding-puzzle/',
+  'https://leetcode-cn.com/problems/n-queens-ii/',
+  'https://leetcode-cn.com/problems/counting-bits/',
+  'https://leetcode-cn.com/problems/lru-cache/',
+  'https://leetcode-cn.com/problems/relative-sort-array/',
+  'https://leetcode-cn.com/problems/valid-anagram/',
+  'https://leetcode-cn.com/problems/design-a-leaderboard/',
+  'https://leetcode-cn.com/problems/merge-intervals/',
+  'https://leetcode-cn.com/problems/reverse-pairs/',
+  'https://leetcode-cn.com/problems/shu-zu-zhong-de-ni-xu-dui-lcof/',
 ];
 let exerciseMap = new Map(
   exercises.map((exercise, index) => {
