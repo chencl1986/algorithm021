@@ -35,8 +35,8 @@ var shortestPathBinaryMatrix = function (grid) {
   let visited = new Set();
   let routeMap = new Map();
   let distanceMap = new Map([[start, 0]]);
-  const heuristic = (node) => {
-    return Math.max(Math.abs(m - node[0]), Math.abs(n - node[1]));
+  const heuristic = ([a, b]) => {
+    return Math.max(Math.abs(m - a), Math.abs(n - b));
   };
   const compare = (a, b) => {
     return distanceMap.get(a) - distanceMap.get(b);
@@ -99,14 +99,14 @@ var shortestPathBinaryMatrix = function (grid) {
         const newNode = [newX, newY];
         // 将下一步的坐标存入队列，用于下一层循环
         binaryHeap.insert(newNode);
-        // if (x === 2 && y === 2) {
-        //   console.log(
-        //     newNode,
-        //     distanceMap.get(node) + 1 + heuristic(newNode),
-        //     // distanceMap,
-        //     // binaryHeap.data,
-        //   );
-        // }
+        if (x === 3 && y === 3) {
+          console.log(
+            newNode,
+            distanceMap.get(node) + 1 + heuristic(newNode),
+            distanceMap,
+            binaryHeap.data,
+          );
+        }
         distanceMap.set(
           newNode,
           distanceMap.get(node) + 1 + heuristic(newNode),
@@ -250,6 +250,11 @@ class BinaryHeap {
   // 读取堆顶元素
   peek() {
     return this.data[0];
+  }
+
+  // 清除所有元素
+  clear() {
+    this.data = [];
   }
 }
 // @lc code=end
