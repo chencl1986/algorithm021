@@ -10,6 +10,7 @@
  * @return {number}
  */
 var shortestPathBinaryMatrix = function (grid) {
+  // [[0,0,0],[0,0,0],[0,0,0]]
   // [[0,0,0],[1,1,0],[1,1,0]]
   // [[0,1,0,0],[0,0,0,1],[0,0,0,0],[0,0,0,0]]
   // [[0,0,0,0,1],[1,0,0,0,0],[0,1,0,1,0],[0,0,0,1,1],[0,0,0,1,0]]
@@ -61,6 +62,7 @@ var shortestPathBinaryMatrix = function (grid) {
     // 出队一个坐标，计算它可以行走的下一步位置
     let node = binaryHeap.deleteHead();
     const [x, y] = node;
+    const key = JSON.stringify(node)
     // console.log(node);
 
     if (visited.has(JSON.stringify(node))) {
@@ -80,7 +82,7 @@ var shortestPathBinaryMatrix = function (grid) {
 
       return route.length;
     }
-    visited.add(JSON.stringify(node));
+    visited.add(key);
 
     for (let i = 0; i < direction.length; i++) {
       // 下一步可以向四周行走，计算出相应新坐标
@@ -97,19 +99,20 @@ var shortestPathBinaryMatrix = function (grid) {
         grid[newX][newY] === 0
       ) {
         const newNode = [newX, newY];
+        const newKey = JSON.stringify(newNode)
         // 将下一步的坐标存入队列，用于下一层循环
         binaryHeap.insert(newNode);
-        if (x === 3 && y === 3) {
+        if (x === 1 && y === 1) {
           console.log(
             newNode,
-            distanceMap.get(node) + 1 + heuristic(newNode),
+            distanceMap.get(key) + 1 + heuristic(newNode),
             distanceMap,
             binaryHeap.data,
           );
         }
         distanceMap.set(
           newNode,
-          distanceMap.get(node) + 1 + heuristic(newNode),
+          distanceMap.get(key) + 1 + heuristic(newNode),
         );
         routeMap.set(newNode, node);
       }
