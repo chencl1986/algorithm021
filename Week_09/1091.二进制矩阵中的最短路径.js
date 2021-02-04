@@ -32,7 +32,7 @@ var shortestPathBinaryMatrix = function (grid) {
     return 1;
   }
 
-  const start = [0, 0];
+  const start = 0;
   let visited = new Set();
   let routeMap = new Map();
   let distanceMap = new Map([[start, 0]]);
@@ -46,48 +46,48 @@ var shortestPathBinaryMatrix = function (grid) {
   binaryHeap.insert(start);
   // 可以向四周所有方向行走，缓存8个方向
   const direction = [
-    [1, 0],
-    [0, 1],
-    [1, 1],
-    [-1, 1],
-    [1, -1],
+    n, // [1, 0], 下
+    1, // [0, 1], 右
+    n + 1, // [1, 1], 右下
+    -(n - 1), // [-1, 1], 右上
+    n - 1, // [1, -1], 左下
     // 一下3种都是往回走，无需判断
-    [-1, 0],
-    [0, -1],
-    [-1, -1],
+    -n, // [-1, 0], 上
+    -1, // [0, -1], 左
+    -(n + 1), // [-1, -1], 左上
   ];
-
   // 如果队列中有值，则继续搜索
   while (binaryHeap.size()) {
     // 出队一个坐标，计算它可以行走的下一步位置
     let node = binaryHeap.deleteHead();
-    const [x, y] = node;
-    const key = JSON.stringify(node)
+    const x = Math.floor(node / n);
+    const y = node % n;
     // console.log(node);
 
-    if (visited.has(JSON.stringify(node))) {
+    if (visited.has(node)) {
       continue;
     }
     if (x === m && y === n) {
       let route = [node];
-      grid[node[0]][node[1]] = 8;
+      grid[x][y] = 8;
 
       while (routeMap.has(node)) {
         node = routeMap.get(node);
         route.unshift(node);
-        grid[node[0]][node[1]] = 8;
+        grid[x][y] = 8;
       }
       // console.log(route);
       console.log(grid);
 
       return route.length;
     }
-    visited.add(key);
+    visited.add(node);
 
     for (let i = 0; i < direction.length; i++) {
       // 下一步可以向四周行走，计算出相应新坐标
-      const newX = x + direction[i][0];
-      const newY = y + direction[i][1];
+      const newNode = node + direction[i];
+      const newX = Math.floor(node / n);
+      const newY = node % n;
 
       if (
         // 判断新坐标不可超出矩阵
@@ -98,22 +98,17 @@ var shortestPathBinaryMatrix = function (grid) {
         // 下一步可以行走，才进行记录
         grid[newX][newY] === 0
       ) {
-        const newNode = [newX, newY];
-        const newKey = JSON.stringify(newNode)
         // 将下一步的坐标存入队列，用于下一层循环
         binaryHeap.insert(newNode);
         if (x === 1 && y === 1) {
           console.log(
             newNode,
-            distanceMap.get(key) + 1 + heuristic(newNode),
+            distanceMap.get(node) + 1 + heuristic(newNode),
             distanceMap,
             binaryHeap.data,
           );
         }
-        distanceMap.set(
-          newNode,
-          distanceMap.get(key) + 1 + heuristic(newNode),
-        );
+        distanceMap.set(newNode, distanceMap.get(node) + 1 + heuristic(newNode));
         routeMap.set(newNode, node);
       }
     }
