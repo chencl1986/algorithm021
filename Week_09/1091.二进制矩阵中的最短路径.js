@@ -53,9 +53,9 @@ var shortestPathBinaryMatrix = function (grid) {
     [-1, 1], // 右上
     [1, -1], // 左下
     // 一下3种都是往回走，无需判断
-    [-1, 0], // 上
-    [0, -1], // 左
-    [-1, -1], // 左上
+    // [-1, 0], // 上
+    // [0, -1], // 左
+    // [-1, -1], // 左上
   ];
   // 如果队列中有值，则继续搜索
   while (binaryHeap.size()) {
@@ -77,10 +77,12 @@ var shortestPathBinaryMatrix = function (grid) {
         grid[x][y] = 8;
       }
       // console.log(route);
-      // console.log(grid);
+      console.log(grid);
 
       return route.length;
     }
+    grid[x][y] = 8;
+    console.log(x, y, visited.has(node));
     visited.add(node);
 
     for (let i = 0; i < direction.length; i++) {
@@ -90,13 +92,14 @@ var shortestPathBinaryMatrix = function (grid) {
       const newNode = newX * row + newY;
 
       if (
+        !visited.has(newNode) &&
         // 判断新坐标不可超出矩阵
         newX >= 0 &&
         newY >= 0 &&
         newX <= m &&
         newY <= n &&
         // 下一步可以行走，才进行记录
-        grid[newX][newY] === 0
+        grid[newX][newY] !== 1
       ) {
         // 将下一步的坐标存入队列，用于下一层循环
         const nextStep = distanceMap.get(node) + 1;
@@ -251,3 +254,33 @@ class BinaryHeap {
   }
 }
 // @lc code=end
+
+[
+  [0, 0, 1, 0, 0, 0, 0],
+  [0, 1, 0, 0, 0, 0, 1],
+  [0, 0, 1, 0, 1, 0, 0],
+  [0, 0, 0, 1, 1, 1, 0],
+  [1, 0, 0, 1, 1, 0, 0],
+  [1, 1, 1, 1, 1, 0, 1],
+  [0, 0, 1, 0, 0, 0, 0],
+];
+[
+  [7, 7, 1, 7, 0, 0, 0],
+  [7, 1, 7, 7, 7, 0, 1],
+  [7, 7, 1, 7, 1, 7, 0],
+  [7, 7, 7, 1, 1, 1, 7],
+  [1, 7, 7, 1, 1, 7, 7],
+  [1, 1, 1, 1, 1, 7, 1],
+  [0, 0, 1, 0, 0, 0, 8],
+];
+[
+  [7, 7, 7, 0, 1, 1, 1, 1, 0],
+  [7, 1, 1, 7, 0, 0, 0, 1, 0],
+  [7, 7, 1, 7, 7, 0, 0, 0, 0],
+  [1, 1, 7, 7, 1, 7, 0, 1, 1],
+  [0, 0, 1, 1, 1, 7, 1, 0, 1],
+  [0, 1, 0, 1, 0, 7, 7, 0, 0],
+  [0, 0, 0, 1, 0, 1, 7, 7, 0],
+  [0, 1, 0, 1, 1, 0, 0, 7, 7],
+  [0, 0, 0, 0, 0, 1, 0, 1, 7],
+];
