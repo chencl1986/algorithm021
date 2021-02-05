@@ -10,17 +10,18 @@
  * @return {number}
  */
 var shortestPathBinaryMatrix = function (grid) {
+  // 调试Case
   // [[0,0,0],[0,0,0],[0,0,0]]
   // [[0,0,0],[1,1,0],[1,1,0]]
   // [[0,1,0,0],[0,0,0,1],[0,0,0,0],[0,0,0,0]]
   // [[0,0,0,0,1],[1,0,0,0,0],[0,1,0,1,0],[0,0,0,1,1],[0,0,0,1,0]]
+  // [[0,0,1,0,1,1],[1,0,0,1,0,0],[0,1,0,1,0,0],[1,0,1,0,0,0],[0,1,0,1,0,0],[0,0,0,0,0,0]]
   // [[0,0,1,0,0,0,0],[0,1,0,0,0,0,1],[0,0,1,0,1,0,0],[0,0,0,1,1,1,0],[1,0,0,1,1,0,0],[1,1,1,1,1,0,1],[0,0,1,0,0,0,0]]
   // [[0,0,0,0,1,1,1,1,0],[0,1,1,0,0,0,0,1,0],[0,0,1,0,0,0,0,0,0],[1,1,0,0,1,0,0,1,1],[0,0,1,1,1,0,1,0,1],[0,1,0,1,0,0,0,0,0],[0,0,0,1,0,1,0,0,0],[0,1,0,1,1,0,0,0,0],[0,0,0,0,0,1,0,1,0]]
-  // 这个Case无法通过
-  // [[0,0,1,0,1,1],[1,0,0,1,0,0],[0,1,0,1,0,0],[1,0,1,0,0,0],[0,1,0,1,0,0],[0,0,0,0,0,0]]
   // 缓存矩阵的终点位置
   const m = grid.length - 1;
   const n = grid[0].length - 1;
+  const row = grid[0].length;
 
   // 当起点和终点为1时，必然无法到达终点
   if (grid[0][0] === 1 || grid[m][n] === 1) {
@@ -32,37 +33,36 @@ var shortestPathBinaryMatrix = function (grid) {
     return 1;
   }
 
-  const start = 0;
+  const start = [0, 0];
   let visited = new Set();
   let routeMap = new Map();
-  let distanceMap = new Map([[start, 0]]);
-  const heuristic = ([a, b]) => {
+  let distanceMap = new Map([start]);
+  const heuristic = (a, b) => {
     return Math.max(Math.abs(m - a), Math.abs(n - b));
   };
   const compare = (a, b) => {
-    return distanceMap.get(a) - distanceMap.get(b);
+    return a[1] - b[1];
   };
   let binaryHeap = new BinaryHeap(compare);
   binaryHeap.insert(start);
   // 可以向四周所有方向行走，缓存8个方向
   const direction = [
-    n, // [1, 0], 下
-    1, // [0, 1], 右
-    n + 1, // [1, 1], 右下
-    -(n - 1), // [-1, 1], 右上
-    n - 1, // [1, -1], 左下
+    [1, 0], // 下
+    [0, 1], // 右
+    [1, 1], // 右下
+    [-1, 1], // 右上
+    [1, -1], // 左下
     // 一下3种都是往回走，无需判断
-    -n, // [-1, 0], 上
-    -1, // [0, -1], 左
-    -(n + 1), // [-1, -1], 左上
+    [-1, 0], // 上
+    [0, -1], // 左
+    [-1, -1], // 左上
   ];
   // 如果队列中有值，则继续搜索
   while (binaryHeap.size()) {
     // 出队一个坐标，计算它可以行走的下一步位置
-    let node = binaryHeap.deleteHead();
-    const x = Math.floor(node / n);
-    const y = node % n;
-    // console.log(node);
+    let node = binaryHeap.deleteHead()[0];
+    const x = Math.floor(node / row);
+    const y = node % row;
 
     if (visited.has(node)) {
       continue;
@@ -77,7 +77,7 @@ var shortestPathBinaryMatrix = function (grid) {
         grid[x][y] = 8;
       }
       // console.log(route);
-      console.log(grid);
+      // console.log(grid);
 
       return route.length;
     }
@@ -85,9 +85,9 @@ var shortestPathBinaryMatrix = function (grid) {
 
     for (let i = 0; i < direction.length; i++) {
       // 下一步可以向四周行走，计算出相应新坐标
-      const newNode = node + direction[i];
-      const newX = Math.floor(node / n);
-      const newY = node % n;
+      const newX = x + direction[i][0];
+      const newY = y + direction[i][1];
+      const newNode = newX * row + newY;
 
       if (
         // 判断新坐标不可超出矩阵
@@ -99,20 +99,15 @@ var shortestPathBinaryMatrix = function (grid) {
         grid[newX][newY] === 0
       ) {
         // 将下一步的坐标存入队列，用于下一层循环
-        binaryHeap.insert(newNode);
-        if (x === 1 && y === 1) {
-          console.log(
-            newNode,
-            distanceMap.get(node) + 1 + heuristic(newNode),
-            distanceMap,
-            binaryHeap.data,
-          );
+        const nextStep = distanceMap.get(node) + 1;
+        binaryHeap.insert([newNode, nextStep + heuristic(newX, newY)]);
+
+        if (!distanceMap.has(newNode) || nextStep < distanceMap.get(newNode)) {
+          distanceMap.set(newNode, nextStep);
+          routeMap.set(newNode, node);
         }
-        distanceMap.set(newNode, distanceMap.get(node) + 1 + heuristic(newNode));
-        routeMap.set(newNode, node);
       }
     }
-    // console.log('----------');
   }
 
   return -1;
@@ -256,77 +251,3 @@ class BinaryHeap {
   }
 }
 // @lc code=end
-[
-  [8, 1, 0, 0],
-  [8, 0, 0, 1],
-  [0, 8, 8, 0],
-  [0, 0, 0, 8],
-];
-
-[
-  [8, 1, 0, 0],
-  [0, 8, 0, 1],
-  [0, 0, 8, 0],
-  [0, 0, 8, 8],
-];
-
-[
-  [0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0],
-  [0, 1, 0, 1, 0],
-  [0, 0, 0, 1, 1],
-  [0, 0, 0, 1, 0],
-];
-
-[
-  [0, 0, 1, 0, 0, 0, 0],
-  [0, 1, 0, 0, 0, 0, 1],
-  [0, 0, 1, 0, 1, 0, 0],
-  [0, 0, 0, 1, 1, 1, 0],
-  [1, 0, 0, 1, 1, 0, 0],
-  [1, 1, 1, 1, 1, 0, 1],
-  [0, 0, 1, 0, 0, 0, 0],
-];
-
-[
-  [8, 0, 1, 0, 0, 0, 0],
-  [8, 1, 0, 0, 8, 0, 1],
-  [0, 8, 1, 8, 1, 8, 0],
-  [0, 0, 8, 1, 1, 1, 8],
-  [1, 0, 0, 1, 1, 0, 8],
-  [1, 1, 1, 1, 1, 8, 1],
-  [0, 0, 1, 0, 0, 0, 8],
-];
-
-[
-  [0, 0, 0, 0, 1, 1, 1, 1, 0],
-  [0, 1, 1, 0, 0, 0, 0, 1, 0],
-  [0, 0, 1, 0, 0, 0, 0, 0, 0],
-  [1, 1, 0, 0, 1, 0, 0, 1, 1],
-  [0, 0, 1, 1, 1, 0, 1, 0, 1],
-  [0, 1, 0, 1, 0, 0, 0, 0, 0],
-  [0, 0, 0, 1, 0, 1, 0, 0, 0],
-  [0, 1, 0, 1, 1, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 1, 0, 1, 0],
-];
-[
-  [8, 0, 0, 0, 1, 1, 1, 1, 0],
-  [8, 1, 1, 0, 0, 0, 0, 1, 0],
-  [0, 8, 1, 0, 8, 0, 0, 0, 0],
-  [1, 1, 8, 8, 1, 8, 0, 1, 1],
-  [0, 0, 1, 1, 1, 8, 1, 0, 1],
-  [0, 1, 0, 1, 0, 8, 0, 0, 0],
-  [0, 0, 0, 1, 0, 1, 8, 0, 0],
-  [0, 1, 0, 1, 1, 0, 0, 8, 0],
-  [0, 0, 0, 0, 0, 1, 0, 1, 8],
-];
-
-// [[0,0,1,0,1,1],[1,0,0,1,0,0],[0,1,0,1,0,0],[1,0,1,0,0,0],[0,1,0,1,0,0],[0,0,0,0,0,0]]
-[
-  [8, 0, 1, 0, 1, 1],
-  [1, 8, 0, 1, 0, 0],
-  [0, 1, 8, 1, 0, 0],
-  [1, 0, 1, 8, 8, 0],
-  [0, 1, 0, 1, 0, 8],
-  [0, 0, 0, 0, 0, 8],
-];
