@@ -69,20 +69,20 @@ var shortestPathBinaryMatrix = function (grid) {
     }
     if (x === m && y === n) {
       let route = [node];
-      grid[x][y] = 8;
+      // grid[x][y] = 8;
 
       while (routeMap.has(node)) {
         node = routeMap.get(node);
         route.unshift(node);
-        grid[x][y] = 8;
+        // grid[x][y] = 8;
       }
       // console.log(route);
-      console.log(grid);
+      // console.log(grid);
 
       return route.length;
     }
-    grid[x][y] = 8;
-    console.log(x, y, visited.has(node));
+    // grid[x][y] = 8;
+    // console.log(x, y, visited.has(node));
     visited.add(node);
 
     for (let i = 0; i < direction.length; i++) {
@@ -99,7 +99,7 @@ var shortestPathBinaryMatrix = function (grid) {
         newX <= m &&
         newY <= n &&
         // 下一步可以行走，才进行记录
-        grid[newX][newY] !== 1
+        grid[newX][newY] === 0
       ) {
         // 将下一步的坐标存入队列，用于下一层循环
         const nextStep = distanceMap.get(node) + 1;
