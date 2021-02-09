@@ -89,7 +89,6 @@ var shortestPathBinaryMatrix = function (grid) {
   grid[0][0] = 1;
   let count = 1;
   const direction = [
-    [0, -1],
     [-1, 1],
     [0, 1],
     [1, 1],
