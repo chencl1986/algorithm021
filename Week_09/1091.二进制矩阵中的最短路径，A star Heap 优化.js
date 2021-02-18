@@ -71,7 +71,7 @@ var shortestPathBinaryMatrix = function (grid) {
   // [[0,0,1,0,1,1],[1,0,0,1,0,0],[0,1,0,1,0,0],[1,0,1,0,0,0],[0,1,0,1,0,0],[0,0,0,0,0,0]]
   // [[0,0,1,0,0,0,0],[0,1,0,0,0,0,1],[0,0,1,0,1,0,0],[0,0,0,1,1,1,0],[1,0,0,1,1,0,0],[1,1,1,1,1,0,1],[0,0,1,0,0,0,0]]
   // [[0,0,0,0,1,1,1,1,0],[0,1,1,0,0,0,0,1,0],[0,0,1,0,0,0,0,0,0],[1,1,0,0,1,0,0,1,1],[0,0,1,1,1,0,1,0,1],[0,1,0,1,0,0,0,0,0],[0,0,0,1,0,1,0,0,0],[0,1,0,1,1,0,0,0,0],[0,0,0,0,0,1,0,1,0]]
-  // 这个Case欧氏距离通过不了
+  // 这个Case如果heuristic使用欧氏距离计算无法通过
   // [[0,0,1,0,0,1,0,1,0],[0,0,0,0,0,0,0,0,0],[0,1,1,0,1,1,1,1,1],[0,0,0,1,0,0,0,0,0],[1,1,0,0,0,1,0,0,0],[1,0,1,0,0,1,0,0,1],[1,1,1,1,0,0,1,0,0],[1,0,0,1,0,0,1,1,1],[0,0,0,0,0,0,0,0,0]]
   const m = grid.length - 1; // 行和列的的最后元素索引
   const colNum = grid.length; // 列的数量，即每行的元素数量
@@ -106,7 +106,7 @@ var shortestPathBinaryMatrix = function (grid) {
   binaryHeap.insert({node: 0, priority: 0});
   // 每次可以走的方向，根据题意可以走8个方向，但实际上都是从左上走向右下，不需要往回走
   const direction = [
-    [-1, 1], // 上
+    [-1, 1], // 右上
     [0, 1], // 右
     [1, 1], // 右下
     [1, 0], // 下
@@ -128,6 +128,7 @@ var shortestPathBinaryMatrix = function (grid) {
 
     // 如果当前节点是终点，表示找到了最短路径
     if (node === destination) {
+      // 可以用这段代码生成走过的路径
       /* const target = node;
       grid[x][y] = 8;
       while (routeMap.has(node)) {
@@ -136,7 +137,7 @@ var shortestPathBinaryMatrix = function (grid) {
         const y = node % colNum;
         grid[x][y] = 8;
       }
-      console.log(JSON.stringify(grid));
+      console.log(grid);
       return distanceMap.get(target); */
       // distanceMap中存储的是终点的路径长度
       return distanceMap.get(node);
@@ -170,13 +171,13 @@ var shortestPathBinaryMatrix = function (grid) {
       binaryHeap.insert({
         // 缓存当前节点，即为其在网格中的编号
         node: newNode,
-        // 从起点走到当前位置的距离，加上估算出的从当前位置走到终点的距离，就是估算的从起点到终点的距离
+        // 从起点走到当前位置的距离，加上估算出的从当前位置走到终点的距离。就是如果走这个位置，整条路径的长度
         priority: distance + heuristic(newX, newY),
       });
 
       // 如果当前节点未在distanceMap中储存过，需要进行缓存
-      // 如果已缓存的距离，比此次计算的距离大，表示之前缓存的距离不是最优的，需要更新
-      // 由于每次都会进行一次更新，因此distanceMap和routeMap中始终了最优解
+      // 如果已缓存的距离比此次计算的距离大，表示之前缓存的距离不是最优的，需要更新
+      // 由于每次都会进行一次更新，因此distanceMap和routeMap中始终保存了最优解
       if (!distanceMap.has(newNode) || distanceMap.get(newNode) > distance) {
         // 缓存从起点走到当前节点的距离
         distanceMap.set(newNode, distance);

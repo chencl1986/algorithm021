@@ -28,15 +28,15 @@ var shortestPathBinaryMatrix = function (grid) {
   let level = 1; // 缓存路径长度，起点的长度为1
   // 可以向四周所有方向行走，缓存8个方向
   const direction = [
-    [1, 0],
-    [0, 1],
-    [1, 1],
-    [-1, 1],
-    [1, -1],
+    [-1, 1], // 右上
+    [0, 1], // 右
+    [1, 1], // 右下
+    [1, 0], // 下
+    [1, -1], // 左下
     // 一下3种都是往回走，无需判断
-    // [-1, 0],
-    // [0, -1],
-    // [-1, -1],
+    // [-1, 0], // 上
+    // [0, -1], // 左
+    // [-1, -1], // 左上
   ];
 
   // 如果队列中有值，则继续搜索
@@ -54,24 +54,25 @@ var shortestPathBinaryMatrix = function (grid) {
         const newX = x + direction[i][0];
         const newY = y + direction[i][1];
 
+        // 如果新坐标超出网格，或者被标记为1，表示无法行走，则跳过
         if (
-          // 判断新坐标不可超出矩阵
-          newX >= 0 &&
-          newY >= 0 &&
-          newX <= m &&
-          newY <= n &&
-          // 下一步可以行走，才进行记录
-          grid[newX][newY] === 0
+          newX < 0 ||
+          newY < 0 ||
+          newX > m ||
+          newY > m ||
+          grid[newX][newY] === 1
         ) {
-          // 如果新坐标是终点，表示找到路径，返回长度即可
-          if (newX === m && newY === n) {
-            return level + 1;
-          }
-          // 将走过的位置标记为1，避免重复行走
-          grid[newX][newY] = 1;
-          // 将下一步的坐标存入队列，用于下一层循环
-          queue.push([newX, newY]);
+          continue;
         }
+
+        // 如果新坐标是终点，表示找到路径，返回长度即可
+        if (newX === m && newY === n) {
+          return level + 1;
+        }
+        // 将走过的位置标记为1，避免重复行走
+        grid[newX][newY] = 1;
+        // 将下一步的坐标存入队列，用于下一层循环
+        queue.push([newX, newY]);
       }
     }
 
