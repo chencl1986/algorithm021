@@ -61,11 +61,21 @@ var rob = function (nums) {
    * dp[i] = Math.max(dp[i - 1] + 0, nums[i] + dp[i - 2])
    */
   // 由于要向前递推两层，一次初始化时要创建两个元素，并且都要取最大值
-  let dp = [nums[0] || 0, Math.max(nums[0] || 0, nums[1] || 0)];
+  let dp = [
+    // 偷了第0户
+    nums[0] || 0,
+    // 第0和1户只能选一户偷
+    Math.max(nums[0] || 0, nums[1] || 0),
+  ];
 
-  // 直接带入递推公式即可
+  // 从第2户开始递推
   for (let i = 2; i < nums.length; i++) {
-    dp[i] = Math.max(dp[i - 1], nums[i] + dp[i - 2]);
+    dp[i] = Math.max(
+      // 如果不偷第i户，只需考虑i-1户的情况
+      dp[i - 1],
+      // 如果偷第i户，需要考虑i-2到0户的情况，而i-2必然大于之前所有结果，此处只需要考虑i-2即可
+      nums[i] + dp[i - 2],
+    );
   }
 
   // 递推到最后一个值,就是最大偷到的金额

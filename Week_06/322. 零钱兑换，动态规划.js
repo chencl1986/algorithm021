@@ -14,13 +14,14 @@ var coinChange = function (coins, amount) {
   // 兑换的金额是amount，因此需要从0开始递推到amount
   // 由于要计算的是最小值，因此初始化为Infinity，避免计算错误
   let dp = new Array(amount + 1).fill(Infinity);
-  dp[0] = 0; // 金额为0时，硬币数为0
+  dp[0] = 0; // 金额为0时，硬币数为0，用于第一次使用硬币
 
   // 从1开始才会累计硬币个数
   for (let i = 1; i < dp.length; i++) {
     // 需要计算各种硬币的组合情况
     for (const coin of coins) {
-      // 向前查找硬币的使用情况，需要至少保证金额大于0
+      // 向前查找硬币的使用情况，当前金额是由金额i - coin加上coin而来，需要至少保证金额大于0
+      // i - coin === 0 时，是第一次使用当前硬币
       if (i - coin >= 0) {
         // 如果要凑成当前金额，例如11，它可能的是由10+1，9+2，6+5组合而成
         dp[i] = Math.min(
